@@ -6,8 +6,9 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const userRoute = require('./routes/users');
 const authRoute = require('./routes/auth');
-const postRoute = require('./routes/posts')
-const multer = require('multer')
+const postRoute = require('./routes/posts');
+const multer = require('multer');
+const path = require('path');
 
 
 dotenv.config();
@@ -16,6 +17,8 @@ MONGO_URL = process.env.MONGO_URL
 mongoose.connect(MONGO_URL, {useNewUrlParser: true}, () => {
   console.log('connected to MongoDB')
 })
+
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 //middleware
 app.use(express.json());
@@ -27,7 +30,7 @@ const storage = multer.diskStorage({
     cb(null, 'public/images');
   },
   filename: (req,file,cb) => {
-    cb(null, file.originalname);
+    cb(null, req.body.name);
   }
 })
 
