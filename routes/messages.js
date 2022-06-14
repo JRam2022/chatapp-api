@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Message = require('../models/Message');
 
+// add message
 router.post("/", async (req, res) => {
   const newMessage = new Message(req.body);
 
@@ -12,6 +13,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// find all messages for user
 router.get("/:conversationId", async (req, res) => {
   try {
     const messages = await Message.find({

@@ -16,7 +16,6 @@ router.post("/", async(req,res) => {
 })
 
 //get user convos
-
 router.get("/:userId", async(req,res) => {
   try{
     const conversation = await Conversation.find({
