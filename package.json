@@ -16,6 +16,7 @@
     "helmet": "^5.1.0",
     "mongoose": "^6.3.6",
     "morgan": "^1.10.0",
+    "multer": "*",
     "nodemon": "^2.0.16"
   }
 }
