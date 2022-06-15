@@ -60,7 +60,6 @@ app.listen(8800, ()=> {
   console.log('Backend server is running!')
 })
 
-
 //Socket 
 const io = require("socket.io")(8900, {
   cors: {
@@ -79,6 +78,13 @@ const removeUser = (socketId) => {
   users = users.filter(user=>user.socketId !== socketId)
 }
 
+const getUser = (userId) => {
+  console.log("userID", userId)
+  console.log("users", users)
+  console.log("USERS FIND", users.find(user=>user.userId === userId))
+  return users.find(user=>user.userId === userId)
+}
+
   
 io.on("connection", (socket) => {
   //when connected
@@ -86,11 +92,25 @@ io.on("connection", (socket) => {
 
   // take userid and socket id from user
   socket.on("addUser", userId=>{
+    console.log("addUser")
     addUser(userId, socket.id);
+    console.log(userId)
+
     io.emit("getUsers", users);
-  })
+  });
   
   //send and get message
+  socket.on("sendMessage", ({senderId, receiverId, text})=>{
+    const user = getUser(receiverId);
+    console.log("USER", user)
+    console.log("SENDER ID", senderId)
+    console.log("RECEIVER ID", receiverId)
+    console.log("TEXT", text)
+    io.to(user.socketId).emit("getMessage", {
+      senderId, 
+      text,
+    });
+  });
 
   //when disconnected
   socket.on("disconnect", () => {
