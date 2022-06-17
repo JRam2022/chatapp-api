@@ -27,6 +27,20 @@ router.get("/:userId", async(req,res) => {
   }
 })
 
+//get convo
+router.get("/convo/:conversationId", async(req,res) => {
+  try{
+    const conversation = await Conversation.findById({
+      _id: [req.params.conversationId] }
+    );
+    console.log("CONVERSATION")
+    res.status(200).json(conversation)
+  }catch(err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+})
+
 // get conv includes two userId
 router.get("/find/:firstUserId/:secondUserId", async(req,res) => {
   try{

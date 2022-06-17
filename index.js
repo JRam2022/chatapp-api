@@ -26,7 +26,7 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')));
 //middleware
 app.use(express.json());
 app.use(helmet());
-app.use(morgan("common"));
+app.use(morgan("dev"));
 
 const storage = multer.diskStorage({
   destination:(req,file,cb) => {
@@ -92,9 +92,7 @@ io.on("connection", (socket) => {
 
   // take userid and socket id from user
   socket.on("addUser", userId=>{
-    console.log("addUser")
     addUser(userId, socket.id);
-    console.log(userId)
 
     io.emit("getUsers", users);
   });
@@ -102,14 +100,13 @@ io.on("connection", (socket) => {
   //send and get message
   socket.on("sendMessage", ({senderId, receiverId, text})=>{
     const user = getUser(receiverId);
-    console.log("USER", user)
-    console.log("SENDER ID", senderId)
-    console.log("RECEIVER ID", receiverId)
-    console.log("TEXT", text)
-    io.to(user.socketId).emit("getMessage", {
-      senderId, 
-      text,
-    });
+    
+    if (user) {
+      io.to(user.socketId).emit("getMessage", {
+        senderId, 
+        text,
+      });
+    }
   });
 
   //when disconnected
